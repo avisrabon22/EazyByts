@@ -4,7 +4,6 @@ import com.avijit.appointmentmanagementsystem.DTO.UserRequestDto;
 import com.avijit.appointmentmanagementsystem.DTO.UserResponseDto;
 import com.avijit.appointmentmanagementsystem.Services.UserServiceInterface;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
