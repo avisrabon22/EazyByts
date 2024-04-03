@@ -1,11 +1,14 @@
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
+
 @Setter
+@Getter
+@Entity
 public class AdminModel extends BaseModel{
      // Class variables (attributes)
     @Column(name = "name", nullable = false)
