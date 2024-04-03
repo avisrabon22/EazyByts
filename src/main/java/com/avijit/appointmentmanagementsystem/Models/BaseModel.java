@@ -2,21 +2,20 @@ package com.avijit.appointmentmanagementsystem.Models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 
-@MappedSuperclass
+
 @Getter
 @Setter
 public class BaseModel implements Serializable {
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Id
+    private Long id;
+    @CreatedDate
     private LocalDateTime createdAt;
-    @Column(name = "updated_at", nullable = false)
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 }
