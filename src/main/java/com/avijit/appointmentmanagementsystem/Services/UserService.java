@@ -1,30 +1,21 @@
 package com.avijit.appointmentmanagementsystem.Services;
 
-//import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.avijit.appointmentmanagementsystem.DAO.UserDao;
 import com.avijit.appointmentmanagementsystem.DTO.UserRequestDto;
 import com.avijit.appointmentmanagementsystem.DTO.UserResponseDto;
 import com.avijit.appointmentmanagementsystem.Models.UserModel;
 import com.avijit.appointmentmanagementsystem.Models.UserType;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import net.moznion.random.string.RandomStringGenerator;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements UserServiceInterface{
     private final UserDao userDao;
-//    private final BCrypt bcryptPasswordEncoder;
+
  
     public UserService(UserDao userDao) {
         this.userDao = userDao;
-//        this.bcryptPasswordEncoder = bCryptPasswordEncoder;
     }
-
-
-//   Hash password method
-//    private String hashpassword(String password){
-//           return
-//    }
 
 
 //   User register method
@@ -47,10 +38,6 @@ public class UserService implements UserServiceInterface{
         return userResponseDto;
     }
 
-//Check password method
-//    private boolean checkpassword(String password,String hashpassword){
-//        return bcryptPasswordEncoder.matches(password,hashpassword);
-//    }
 //User login method
     @Override
     public UserResponseDto userLogin(UserRequestDto userRequestDto) {
