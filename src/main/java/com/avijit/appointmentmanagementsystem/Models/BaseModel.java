@@ -2,6 +2,8 @@ package com.avijit.appointmentmanagementsystem.Models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,7 +15,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Setter
 public class BaseModel implements Serializable {
     @Id
-    private Long id;
+    private String id;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

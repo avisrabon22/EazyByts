@@ -1,36 +1,42 @@
 package com.avijit.appointmentmanagementsystem.Services;
 
+//import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.avijit.appointmentmanagementsystem.DAO.UserDao;
 import com.avijit.appointmentmanagementsystem.DTO.UserRequestDto;
 import com.avijit.appointmentmanagementsystem.DTO.UserResponseDto;
 import com.avijit.appointmentmanagementsystem.Models.UserModel;
 import com.avijit.appointmentmanagementsystem.Models.UserType;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import net.moznion.random.string.RandomStringGenerator;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements UserServiceInterface{
     private final UserDao userDao;
-    private final  BCryptPasswordEncoder bcryptPasswordEncoder;
+//    private final BCrypt bcryptPasswordEncoder;
  
-    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder,UserDao userDao) {
+    public UserService(UserDao userDao) {
         this.userDao = userDao;
-        this.bcryptPasswordEncoder = bCryptPasswordEncoder;
+//        this.bcryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    private String hashpassword(String password){
-           return bcryptPasswordEncoder.encode(password);
-    }
 
- 
+//   Hash password method
+//    private String hashpassword(String password){
+//           return
+//    }
+
+
+//   User register method
     @Override
     public UserResponseDto userRegister(UserRequestDto userRequestDto) {
         UserModel userModel = new UserModel();
+        RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
 
+        userModel.setId(randomStringGenerator.generateByRegex("[a-z0-9]{10}"));
         userModel.setName(userRequestDto.getName());
         userModel.setEmail(userRequestDto.getEmail());
-        userModel.setPassword(hashpassword(userRequestDto.getPassword()));
+        userModel.setPassword(userRequestDto.getPassword());
         userModel.setRole(UserType.USER);
         UserModel userResponseDb = userDao.save(userModel);
 
@@ -41,11 +47,11 @@ public class UserService implements UserServiceInterface{
         return userResponseDto;
     }
 
-    private boolean checkpassword(String password,String hashpassword){
-        return bcryptPasswordEncoder.matches(password,hashpassword);
-    }
-
-
+//Check password method
+//    private boolean checkpassword(String password,String hashpassword){
+//        return bcryptPasswordEncoder.matches(password,hashpassword);
+//    }
+//User login method
     @Override
     public UserResponseDto userLogin(UserRequestDto userRequestDto) {
 
@@ -54,7 +60,7 @@ public class UserService implements UserServiceInterface{
             throw new RuntimeException("User not found");
         }
         
-        if(checkpassword(userRequestDto.getPassword(),userModel.getPassword())){
+        if(userModel.getPassword().equals(userRequestDto.getPassword())){
             UserResponseDto userResponseDto = new UserResponseDto();
             userResponseDto.setEmail(userModel.getEmail());
             userResponseDto.setRole(userModel.getRole());
