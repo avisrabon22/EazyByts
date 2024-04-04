@@ -20,11 +20,18 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> userRegister(@Validated @RequestBody UserRequestDto userRequestDto) {
-        UserResponseDto userResponseDto = UserServiceInterface.userRegister(userRequestDto);
+        UserServiceInterface.userRegister(userRequestDto);
 
         return new ResponseEntity<>("User created successfully!!",HttpStatus.CREATED);
 
 
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserResponseDto> userLogin(@Validated @RequestBody UserRequestDto userRequestDto) {
+        UserResponseDto userResponseDto = UserServiceInterface.userLogin(userRequestDto);
+
+        return new ResponseEntity<>(userResponseDto,HttpStatus.OK);
     }
 
 }

@@ -6,4 +6,6 @@ import com.avijit.appointmentmanagementsystem.DTO.UserResponseDto;
 public interface UserServiceInterface {
 
     public UserResponseDto userRegister(UserRequestDto userRequestDto);
+
+    public UserResponseDto userLogin(UserRequestDto userRequestDto);
 }
