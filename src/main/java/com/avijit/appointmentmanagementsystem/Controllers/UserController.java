@@ -39,15 +39,14 @@ public class UserController {
 
     // User profile
     @GetMapping("/profile")
-    public ResponseEntity<UserResponseDto> getProfile() {
-        UserResponseDto responseDto=userServiceInterface.getProfile();
-        return new ResponseEntity<>(HttpStatus.OK,responseDto);
+    public ResponseEntity<UserResponseDto> getProfile(String email) {
+        UserResponseDto responseDto=userServiceInterface.getProfile(email);
+        return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
 
     // Edit user profile
     @PutMapping("profile/{id}")
     public String editUser(@PathVariable String id, @RequestBody String entity) {
-
         return entity;
     }
 }
