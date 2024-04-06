@@ -24,6 +24,9 @@ public class UserController {
     // User registration
     @PostMapping("/register")
     public ResponseEntity<String> userRegister(@Validated @RequestBody UserRequestDto userRequestDto) {
+     if(userRequestDto.getName().isBlank() && userRequestDto.getEmail().isBlank()&&userRequestDto.getPassword().isBlank()){
+            ResponseEntity.badRequest().body("Please fill all the fields");
+        }
         userServiceInterface.userRegister(userRequestDto);
 
         return new ResponseEntity<>("User created successfully!!", HttpStatus.CREATED);

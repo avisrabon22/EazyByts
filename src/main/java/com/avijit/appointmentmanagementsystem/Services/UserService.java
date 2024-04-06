@@ -61,12 +61,13 @@ public class UserService implements UserServiceInterface {
     @Override
     public UserResponseDto getProfile(String email) {
         System.out.println("getProfile");
-        Optional<UserModel> userModel =  userDao.findByEmail(email);
+        Optional<UserModel> userModel =  userDao.findByEmail("avijit@gmail.com");
         System.out.println(userModel);
         UserResponseDto userResponseDto = new UserResponseDto();
         if (userModel.isPresent()) {
             userResponseDto.setName(userModel.get().getName());
             userResponseDto.setEmail(userModel.get().getEmail());
+            userResponseDto.setRole(userModel.get().getRole());
             
         }
 
