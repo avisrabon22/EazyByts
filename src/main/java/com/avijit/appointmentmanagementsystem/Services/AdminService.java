@@ -3,12 +3,12 @@ package com.avijit.appointmentmanagementsystem.Services;
 import org.springframework.stereotype.Service;
 import com.avijit.appointmentmanagementsystem.DTO.AppointmentsRequestDto;
 import com.avijit.appointmentmanagementsystem.DTO.AppointmentsResponseDto;
-import com.avijit.appointmentmanagementsystem.DTO.UserResponseDto;
+import com.avijit.appointmentmanagementsystem.DTO.UserResisterResponseDto;
 
 @Service
 public class AdminService implements AdminServiceInterface {
     @Override
-    public void createUser(UserResponseDto userResponseDto) {
+    public void createUser(UserResisterResponseDto userResponseDto) {
         // TODO Auto-generated method stub
 
     }
@@ -20,7 +20,7 @@ public class AdminService implements AdminServiceInterface {
     }
 
     @Override
-    public void deleteUser(UserResponseDto userResponseDto) {
+    public void deleteUser(UserResisterResponseDto userResponseDto) {
         // TODO Auto-generated method stub
 
     }
@@ -32,7 +32,7 @@ public class AdminService implements AdminServiceInterface {
     }
 
     @Override
-    public UserResponseDto getAllUsers(UserResponseDto userResponseDto) {
+    public UserResisterResponseDto getAllUsers(UserResisterResponseDto userResponseDto) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -44,7 +44,7 @@ public class AdminService implements AdminServiceInterface {
     }
 
     @Override
-    public void updateUser(UserResponseDto userResponseDto) {
+    public void updateUser(UserResisterResponseDto userResponseDto) {
         // TODO Auto-generated method stub
 
     }

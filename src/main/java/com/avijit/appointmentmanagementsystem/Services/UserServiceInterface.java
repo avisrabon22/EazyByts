@@ -1,13 +1,15 @@
 package com.avijit.appointmentmanagementsystem.Services;
 
-import com.avijit.appointmentmanagementsystem.DTO.UserRequestDto;
-import com.avijit.appointmentmanagementsystem.DTO.UserResponseDto;
+import com.avijit.appointmentmanagementsystem.DTO.LogInRequestDto;
+import com.avijit.appointmentmanagementsystem.DTO.UserRegisterRequestDto;
+import com.avijit.appointmentmanagementsystem.DTO.UserResisterResponseDto;
+import com.avijit.appointmentmanagementsystem.Exception.NotExist;
 
 public interface UserServiceInterface {
 
-    public void userRegister(UserRequestDto userRequestDto);
+    public void userRegister(UserRegisterRequestDto userRequestDto);
 
-    public UserResponseDto userLogin(UserRequestDto userRequestDto);
+    public void userLogin(LogInRequestDto logInRequestDto) throws NotExist;
 
-    public UserResponseDto getProfile(String email);
+    public UserResisterResponseDto getProfile(String email);
 }

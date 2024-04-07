@@ -2,7 +2,7 @@ package com.avijit.appointmentmanagementsystem.Services;
 
 import com.avijit.appointmentmanagementsystem.DTO.AppointmentsRequestDto;
 import com.avijit.appointmentmanagementsystem.DTO.AppointmentsResponseDto;
-import com.avijit.appointmentmanagementsystem.DTO.UserResponseDto;
+import com.avijit.appointmentmanagementsystem.DTO.UserResisterResponseDto;
 
 public interface AdminServiceInterface {
     // Admin related methods
@@ -14,12 +14,12 @@ public interface AdminServiceInterface {
     void deleteAppointment(AppointmentsRequestDto appointmentsRequestDto);
 
     // User related methods
-    UserResponseDto getAllUsers(UserResponseDto userResponseDto);
+    UserResisterResponseDto getAllUsers(UserResisterResponseDto userResponseDto);
 
-    void deleteUser(UserResponseDto userResponseDto);
+    void deleteUser(UserResisterResponseDto userResponseDto);
 
-    void updateUser(UserResponseDto userResponseDto);
+    void updateUser(UserResisterResponseDto userResponseDto);
 
-    void createUser(UserResponseDto userResponseDto);
+    void createUser(UserResisterResponseDto userResponseDto);
 
 }

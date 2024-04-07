@@ -1,8 +1,10 @@
 package com.avijit.appointmentmanagementsystem.Services;
 
 import com.avijit.appointmentmanagementsystem.DAO.UserDao;
-import com.avijit.appointmentmanagementsystem.DTO.UserRequestDto;
-import com.avijit.appointmentmanagementsystem.DTO.UserResponseDto;
+import com.avijit.appointmentmanagementsystem.DTO.LogInRequestDto;
+import com.avijit.appointmentmanagementsystem.DTO.UserRegisterRequestDto;
+import com.avijit.appointmentmanagementsystem.DTO.UserResisterResponseDto;
+import com.avijit.appointmentmanagementsystem.Exception.NotExist;
 import com.avijit.appointmentmanagementsystem.Models.UserModel;
 import com.avijit.appointmentmanagementsystem.Models.UserType;
 import net.moznion.random.string.RandomStringGenerator;
@@ -19,7 +21,7 @@ public class UserService implements UserServiceInterface {
 
     // User register method
     @Override
-    public void userRegister(UserRequestDto userRequestDto) {
+    public void userRegister(UserRegisterRequestDto userRequestDto) {
         UserModel userModel = new UserModel();
         RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
 
@@ -28,42 +30,32 @@ public class UserService implements UserServiceInterface {
         userModel.setEmail(userRequestDto.getEmail());
         userModel.setPassword(userRequestDto.getPassword());
         userModel.setRole(UserType.USER);
-        userDao.save(userModel);
-
-        // UserModel userResponseDb =
-        // UserResponseDto userResponseDto = new UserResponseDto();
-        // userResponseDto.setEmail(userResponseDb.getEmail());
-        // userResponseDto.setRole(userResponseDb.getRole());
-    }
+        userDao.save(userModel); 
+   }
 
     // User login method
     @Override
-    public UserResponseDto userLogin(UserRequestDto userRequestDto) {
+    public void userLogin(LogInRequestDto logInRequestDto) throws NotExist {
 
-        // UserModel userModel = userDao.findByEmail();
-        // if(userModel == null){
-        // throw new RuntimeException("User not found");
-        // }
+         String email = logInRequestDto.getEmail();
+        Optional<UserModel> userModel =  userDao.findByEmail(email);
         //
-        // if(userModel.getPassword().equals(userRequestDto.getPassword())){
-        // UserResponseDto userResponseDto = new UserResponseDto();
-        // userResponseDto.setEmail(userModel.getEmail());
-        // userResponseDto.setRole(userModel.getRole());
-        // return userResponseDto;
-        // }
-        //
-        // throw new UnsupportedOperationException("Unimplemented method 'userLogin'");
-        return null;
+        if(userModel.isPresent()&&userModel.get().getPassword().equals(logInRequestDto.getPassword())){
+            System.out.println("Login success");
+        }
+        else{
+            throw new NotExist("User not found");      
+        }
     }
 
     
     // Get profile method
     @Override
-    public UserResponseDto getProfile(String email) {
+    public UserResisterResponseDto getProfile(String email) {
         System.out.println("getProfile");
         Optional<UserModel> userModel =  userDao.findByEmail("avijit@gmail.com");
         System.out.println(userModel);
-        UserResponseDto userResponseDto = new UserResponseDto();
+        UserResisterResponseDto userResponseDto = new UserResisterResponseDto();
         if (userModel.isPresent()) {
             userResponseDto.setName(userModel.get().getName());
             userResponseDto.setEmail(userModel.get().getEmail());
