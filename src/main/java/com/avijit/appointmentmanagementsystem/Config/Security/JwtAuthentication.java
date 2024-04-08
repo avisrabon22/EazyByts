@@ -1,25 +1,52 @@
 package com.avijit.appointmentmanagementsystem.Config.Security;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
+import java.security.Key;
+import java.util.Date;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 
 @Component
-public class JwtAuthentication implements AuthenticationEntryPoint {
+public class JwtAuthentication  {
+private static  final Key secret_key= Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response,
-            AuthenticationException authException) throws IOException, ServletException {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-       
-        PrintWriter writer = response.getWriter();
-        writer.println("HTTP Status 401 - " + authException.getMessage());
+    public  String generateToken(String email) throws IOException {
+        Date now = new Date();
+        Date expireDate = new Date(now.getTime() + 1000 * 60 * 60 * 10);
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(now)
+                .setExpiration(expireDate)
+                .signWith(secret_key)
+                .compact();
     }
-    
+
+    public boolean validateToken(String token) {
+        try {
+            Jws<Claims> claims = Jwts.parserBuilder()
+                    .setSigningKey(secret_key)
+                    .build()
+                    .parseClaimsJws(token);
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    // Extract subject (username) from JWT token
+    public static String extractSubject(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secret_key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+
 }
