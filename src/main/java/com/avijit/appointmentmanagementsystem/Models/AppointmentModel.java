@@ -3,12 +3,9 @@ package com.avijit.appointmentmanagementsystem.Models;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 
 @Getter
 @Setter
