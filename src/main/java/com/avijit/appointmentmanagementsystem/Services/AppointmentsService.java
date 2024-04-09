@@ -1,6 +1,7 @@
 package com.avijit.appointmentmanagementsystem.Services;
-
-import java.net.http.HttpRequest;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.avijit.appointmentmanagementsystem.Config.Security.JwtAuthentication;
@@ -12,7 +13,7 @@ import com.avijit.appointmentmanagementsystem.Models.AppointmentModel;
 import com.avijit.appointmentmanagementsystem.Models.UserModel;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.OverridesAttribute.List;
+import net.moznion.random.string.RandomStringGenerator;
 
 @Service
 public class AppointmentsService implements AppointmentsServiceInterface {
@@ -26,48 +27,63 @@ public class AppointmentsService implements AppointmentsServiceInterface {
 
     @Override
     public void createAppointment(AppointmentsRequestDto appointmentsRequestDto) {
-        // TODO Auto-generated method stub
+        RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
+        String id = randomStringGenerator.generateByRegex("[a-z0-9]{10}");
+        AppointmentModel appointmentModel = new AppointmentModel();
+        appointmentModel.setId(id);
+        appointmentModel.setDate(appointmentsRequestDto.getDate());
+        appointmentModel.setTime(appointmentsRequestDto.getTime());
+        appointmentModel.setPurpose(appointmentsRequestDto.getPurpose());
+        appointmentModel.setLocation(appointmentsRequestDto.getLocation());
+        appointmentDao.save(appointmentModel);
 
     }
 
     @Override
     public void deleteAppointment(AppointmentsRequestDto appointmentsRequestDto) {
-        // TODO Auto-generated method stub
-
+     
     }
 
     @Override
-    public AppointmentsResponseDto getAllAppointments(AppointmentsRequestDto appointmentsRequestDto,
+    public List<AppointmentsResponseDto> getAllAppointments(
             HttpServletRequest httpServletRequest) {
         Cookie[] cookies = httpServletRequest.getCookies();
-        Optional<UserModel> user = null;
-
+        
         for (Cookie cookie : cookies) {
             String token = cookie.getValue();
             if (token.startsWith("Bearer ")) {
                 token = token.substring(7);
                 JwtAuthentication jwtAuthentication = new JwtAuthentication();
                 if (jwtAuthentication.validateToken(token)) {
+                    Optional<UserModel> userOptional = null;
                     String email = JwtAuthentication.extractSubject(token);
-                    user = userDao.findById(email);
+                    userOptional = userDao.findById(email);
+                    if(userOptional.isPresent()){
+                        UserModel user = userOptional.get();
+                       java.util.List<String> appointmentsIdList = user.getAppointmentsIds();
+                       java.util.List<AppointmentModel> appointments = appointmentDao.findAllById(appointmentsIdList);
+                          java.util.List<AppointmentsResponseDto> appointmentsResponseDto = new ArrayList<>();
+                            for (AppointmentModel appointmentModel : appointments) {
+                                AppointmentsResponseDto appointmentsResponseDto2 = new AppointmentsResponseDto();
+                                appointmentsResponseDto2.setDate(appointmentModel.getDate());
+                                appointmentsResponseDto2.setTime(appointmentModel.getTime());
+                                appointmentsResponseDto2.setPurpose(appointmentModel.getPurpose());
+                                appointmentsResponseDto2.setLocation(appointmentModel.getLocation());
+                                appointmentsResponseDto.add(appointmentsResponseDto2);
+                            }
+                            return appointmentsResponseDto;
+                    }
                 } else {
-                    return null;
+                    return Collections.emptyList();
                 }
                 
             }
         }
-        return null;
-    }
-
-    @Override
-    public AppointmentsResponseDto getAppointment(AppointmentsRequestDto appointmentsRequestDto) {
-
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public void updateAppointment(AppointmentsRequestDto appointmentsRequestDto) {
-        // TODO Auto-generated method stub
 
     }
 

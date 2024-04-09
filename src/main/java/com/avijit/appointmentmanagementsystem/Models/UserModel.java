@@ -26,5 +26,5 @@ public class UserModel extends BaseModel {
     private String password;
     private UserType role;
     @DBRef
-    private List<AppointmentModel> appointments;
+    private List<String> appointmentsIds;
 }

@@ -54,8 +54,9 @@ public class UserService implements UserServiceInterface {
         userModel.setRole(UserType.USER);
         userDao.save(userModel);
         String jwtToken = jwtAuthentication.generateToken(userRequestDto.getEmail());
-        String encodedValue = URLEncoder.encode(jwtToken, StandardCharsets.UTF_8);
-        Cookie cookie = new Cookie("Authorization", "Bearer "+encodedValue);
+        String jwtTokenValue = "Bearer "+jwtToken;
+        String encodedValue = URLEncoder.encode(jwtTokenValue, StandardCharsets.UTF_8);
+        Cookie cookie = new Cookie("Authorization", encodedValue);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(3600);
         httpServletResponse.addCookie(cookie);

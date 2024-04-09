@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AppointmentsRequestDto {
-    private String id;
     private LocalDate date;
     private LocalTime time;
     private String purpose;
