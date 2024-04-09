@@ -9,16 +9,20 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class JwtAuthentication  {
+
+
+
 private static  final Key secret_key= Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public  String generateToken(String email) throws IOException {
+    public static String generateToken(String email) throws IOException {
         Date now = new Date();
-        Date expireDate = new Date(now.getTime() + 1000 * 60 * 60 * 10);
+        Date expireDate = new Date(now.getTime() + 3600000);
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(now)
@@ -27,7 +31,7 @@ private static  final Key secret_key= Keys.secretKeyFor(SignatureAlgorithm.HS256
                 .compact();
     }
 
-    public boolean validateToken(String token) {
+    public static boolean validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(secret_key)
@@ -39,6 +43,7 @@ private static  final Key secret_key= Keys.secretKeyFor(SignatureAlgorithm.HS256
         }
     }
     // Extract subject (username) from JWT token
+
     public static String extractSubject(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secret_key)

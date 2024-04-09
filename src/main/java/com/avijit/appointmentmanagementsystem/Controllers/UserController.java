@@ -1,13 +1,10 @@
 package com.avijit.appointmentmanagementsystem.Controllers;
 
-import com.avijit.appointmentmanagementsystem.DTO.LogInRequestDto;
-import com.avijit.appointmentmanagementsystem.DTO.LoginTokenDto;
-import com.avijit.appointmentmanagementsystem.DTO.UserRegisterRequestDto;
-import com.avijit.appointmentmanagementsystem.DTO.UserResisterResponseDto;
+import com.avijit.appointmentmanagementsystem.Config.Security.JwtAuthentication;
+import com.avijit.appointmentmanagementsystem.DTO.*;
 import com.avijit.appointmentmanagementsystem.Exception.NotExist;
 import com.avijit.appointmentmanagementsystem.Services.UserServiceInterface;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.springframework.http.HttpStatus;
@@ -24,18 +21,17 @@ public class UserController {
         this.userServiceInterface = userServiceInterface;
     }
 
-
-    // User registration
+    // User registration ************************************************************************************************
     @PostMapping("/user/register")
-    public ResponseEntity<String> userRegister(@Validated @RequestBody UserRegisterRequestDto userRequestDto,HttpServletResponse httpServletResponse) throws IOException, NotExist {
-        userServiceInterface.userRegister(userRequestDto,httpServletResponse);
+    public ResponseEntity<String> userRegister(@Validated @RequestBody UserRegisterRequestDto userRequestDto, HttpServletResponse httpServletResponse) throws IOException, NotExist {
+        userServiceInterface.userRegister(userRequestDto, httpServletResponse);
 
         return new ResponseEntity<>("User created successfully!!", HttpStatus.CREATED);
     }
 
-    // User login
+    // User login ******************************************************************************************************
     @PostMapping("/user/login")
-    public ResponseEntity<String> userLogin(@Validated @RequestBody LogInRequestDto logInRequestDto,HttpServletResponse httpServletResponse) throws NotExist, IOException {
+    public ResponseEntity<String> userLogin(@Validated @RequestBody LogInRequestDto logInRequestDto, HttpServletResponse httpServletResponse) throws NotExist, IOException {
         LoginTokenDto loginTokenDto = new LoginTokenDto();
         loginTokenDto.setToken(httpServletResponse.getHeader("Authorization"));
         if (loginTokenDto.getToken() != null) {
@@ -51,7 +47,7 @@ public class UserController {
         return null;
     }
 
-//    User logout
+    //    User logout *****************************************************************************************************
     @PostMapping("/user/logout")
     public ResponseEntity<String> userLogout(HttpServletResponse httpServletResponse) {
         Cookie cookie = new Cookie("Authorization", "");
@@ -60,22 +56,29 @@ public class UserController {
         return new ResponseEntity<>("User has logged out", HttpStatus.OK);
     }
 
-    // User profile
+    // User profile *****************************************************************************************************
     @GetMapping("/user/profile")
-    public ResponseEntity<UserResisterResponseDto> getProfile(@CookieValue(name = "Authorization") String token) {
-//        httpServletRequest.setAttribute("Authorization", token);
-        UserResisterResponseDto responseDto = userServiceInterface.getProfile(token);
-        if (responseDto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<UserResisterResponseDto> getProfile(@CookieValue(name = "Authorization") String token)  {
+        if (token != null) {
+            if (token.startsWith("Bearer")) {
+                token = token.substring(7);
+                if (JwtAuthentication.validateToken(token)) {
+                    String email = JwtAuthentication.extractSubject(token);
+                    UserMailRequestDto userMailRequestDto = new UserMailRequestDto();
+                    userMailRequestDto.setEmail(email);
+                    UserResisterResponseDto responseDto = userServiceInterface.getProfile(userMailRequestDto);
+                    return new ResponseEntity<>(responseDto, HttpStatus.OK);
+                }
+            }
         }
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     // Edit user profile
     @PutMapping("/user/profile/{id}")
     public UserResisterResponseDto editUser(HttpServletResponse httpServletResponse) {
         UserResisterResponseDto entity = new UserResisterResponseDto();
-         String token = httpServletResponse.getHeader("Authorization");
+        String token = httpServletResponse.getHeader("Authorization");
         return entity;
     }
 }

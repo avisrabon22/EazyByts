@@ -12,7 +12,7 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
-@Document(collation = "appointments")
+@Document(collection = "appointments")
 public class AppointmentModel extends BaseModel {
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

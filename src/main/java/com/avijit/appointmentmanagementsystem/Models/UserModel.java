@@ -25,6 +25,5 @@ public class UserModel extends BaseModel {
     @NotNull(message = "Password is required")
     private String password;
     private UserType role;
-    @DBRef
     private List<String> appointmentsIds;
 }
