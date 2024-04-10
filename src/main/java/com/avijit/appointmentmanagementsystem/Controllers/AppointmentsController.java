@@ -40,7 +40,7 @@ public class AppointmentsController {
     }
 
     // Add Appointments
-    @PostMapping("/add_appointments")
+    @PostMapping("/add_appointment")
     public ResponseEntity<String> addAppointments(@RequestBody AppointmentsRequestDto appointmentsRequestDto, @CookieValue(name = "Authorization") String token) throws ErrorInServer {
         if (token.startsWith("Bearer")) {
             token = token.substring(7);
@@ -59,13 +59,13 @@ public class AppointmentsController {
     }
 
     // Edit appointments
-    @PutMapping("update_appointments/{id}")
+    @PutMapping("update_appointment/{id}")
     public String editAppointments(@PathVariable String id, @RequestBody String entity) {
         return entity;
     }
 
     // Delete appointments
-    @DeleteMapping("delete_appointments/{id}")
+    @DeleteMapping("delete_appointment/{id}")
     public String deleteAppointments(@PathVariable String id) {
         return id;
     }
