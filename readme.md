@@ -50,4 +50,10 @@ This is a simple appointment management system that allows users to create, read
 - GET /api/v1/appointments/get_appointment_by_date/{date}
 - GET /api/v1/appointments/get_appointment_by_week/{week}
 - GET /api/v1/appointments/get_appointment_by_month/{month}
+- POST /api/v1/admin/super_login
+- POST /api/v1/admin/super_logout
+- GET /api/v1/admin/super_profile
+- PUT /api/v1/admin/super_profile/{id}
+- GET /api/v1/admin/get_all_users
+- GET /api/v1/admin/get_all_appointments
 

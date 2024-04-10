@@ -23,7 +23,10 @@ public class UserController {
 
     // User registration ************************************************************************************************
     @PostMapping("/user/register")
-    public ResponseEntity<String> userRegister(@Validated @RequestBody UserRegisterRequestDto userRequestDto, HttpServletResponse httpServletResponse) throws IOException, NotExist {
+    public ResponseEntity<String> userRegister( @RequestBody UserRegisterRequestDto userRequestDto, HttpServletResponse httpServletResponse) throws IOException, NotExist {
+        if (userRequestDto.getEmail().isEmpty() || userRequestDto.getName() == null || userRequestDto.getPassword() == null) {
+            return new ResponseEntity<>("Please fill all the fields", HttpStatus.BAD_REQUEST);
+        }
         userServiceInterface.userRegister(userRequestDto, httpServletResponse);
 
         return new ResponseEntity<>("User created successfully!!", HttpStatus.CREATED);

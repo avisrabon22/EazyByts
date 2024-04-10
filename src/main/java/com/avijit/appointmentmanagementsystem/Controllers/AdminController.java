@@ -1,26 +1,23 @@
 package com.avijit.appointmentmanagementsystem.Controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/admin")
 public class AdminController {
 
-    @PostMapping("/login")
-    public String login(@RequestParam String param) {
+    @PostMapping("/super_login")
+    public String login(@RequestBody String param) {
         return new String();
     }
 
     // Get all appointments
-    @GetMapping("/getAllAppointments")
+    @GetMapping("/get_All_Appointments")
     public String getAllAppointments(@RequestParam String param) {
         return new String();
     }
 
     // Get all users
-    @GetMapping("/getAllUsers")
+    @GetMapping("/get_All_Users")
     public String getAllUsers(@RequestParam String param) {
         return new String();
     }
