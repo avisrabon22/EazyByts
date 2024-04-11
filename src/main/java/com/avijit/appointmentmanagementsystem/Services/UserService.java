@@ -4,21 +4,16 @@ import com.avijit.appointmentmanagementsystem.Config.Security.JwtAuthentication;
 import com.avijit.appointmentmanagementsystem.DAO.UserDao;
 import com.avijit.appointmentmanagementsystem.DTO.*;
 import com.avijit.appointmentmanagementsystem.Exception.NotExist;
-import com.avijit.appointmentmanagementsystem.Exception.UnAuthorized;
-import com.avijit.appointmentmanagementsystem.Models.AppointmentModel;
 import com.avijit.appointmentmanagementsystem.Models.UserModel;
 import com.avijit.appointmentmanagementsystem.Models.UserType;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import net.moznion.random.string.RandomStringGenerator;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Optional;
 
 @Service
