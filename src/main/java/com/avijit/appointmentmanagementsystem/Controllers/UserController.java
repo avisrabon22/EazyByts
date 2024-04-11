@@ -5,8 +5,6 @@ import com.avijit.appointmentmanagementsystem.DTO.UserRegisterRequestDto;
 import com.avijit.appointmentmanagementsystem.DTO.UserResisterResponseDto;
 import com.avijit.appointmentmanagementsystem.Exception.NotExist;
 import com.avijit.appointmentmanagementsystem.Services.UserServiceInterface;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
