@@ -57,7 +57,7 @@ public class UserService implements UserServiceInterface {
     // User login method ********************************************************************************************
     @Override
     public boolean userLogin(LogInRequestDto logInRequestDto, HttpServletResponse httpServletResponse) throws NotExist, IOException {
-        String UserEmail = logInRequestDto.getEmail();
+        String UserEmail = logInRequestDto.getUsername();
         Optional<UserModel> userModel = userDao.findByEmail(UserEmail);
         if (userModel.isEmpty()) {
             throw new NotExist("User not found");
