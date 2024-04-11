@@ -23,8 +23,6 @@ public class AdminModel extends BaseModel {
     @NotNull
     private String password;
     private Enum<UserType> role;
-    @DBRef
-    private List<UserModel> userModel;
-    @DBRef
-    private List<AppointmentModel> appointments;
+    private List<UserModel> userListIds;
+    private List<AppointmentModel> appointmentsListIds;
 }

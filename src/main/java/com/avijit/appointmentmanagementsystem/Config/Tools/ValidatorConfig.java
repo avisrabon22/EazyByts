@@ -1,4 +1,4 @@
-package com.avijit.appointmentmanagementsystem.Config.Security;
+package com.avijit.appointmentmanagementsystem.Config.Tools;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
