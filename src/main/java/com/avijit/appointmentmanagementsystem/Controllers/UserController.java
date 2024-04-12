@@ -5,6 +5,7 @@ import com.avijit.appointmentmanagementsystem.DTO.*;
 import com.avijit.appointmentmanagementsystem.Exception.NotExist;
 import com.avijit.appointmentmanagementsystem.Services.UserServiceInterface;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.springframework.http.HttpStatus;
@@ -34,20 +35,23 @@ public class UserController {
 
     // User login ******************************************************************************************************
     @PostMapping("/user/login")
-    public ResponseEntity<String> userLogin(@Validated @RequestBody LogInRequestDto logInRequestDto, HttpServletResponse httpServletResponse) throws NotExist, IOException {
+    public ResponseEntity<String> userLogin(@Validated @RequestBody LogInRequestDto logInRequestDto, HttpServletRequest httpServletRequest , HttpServletResponse httpServletResponse) throws NotExist, IOException {
         LoginTokenDto loginTokenDto = new LoginTokenDto();
-        loginTokenDto.setToken(httpServletResponse.getHeader("Authorization"));
+        if (httpServletRequest.getHeader("Authorization") != null) {
+            loginTokenDto.setToken(httpServletRequest.getHeader("Authorization"));
+        }
+
         if (loginTokenDto.getToken() != null) {
             if (userServiceInterface.userTokenLogin(loginTokenDto)) {
-                return new ResponseEntity<>("Welcome back", HttpStatus.OK);
+                return ResponseEntity.ok("Welcome back");
             }
         } else if (userServiceInterface.userLogin(logInRequestDto, httpServletResponse)) {
-            return new ResponseEntity<>("User has logged in", HttpStatus.OK);
+            return ResponseEntity.ok("User has logged in");
         } else {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
-        return null;
+        return new ResponseEntity<>("User not found", HttpStatus.UNAUTHORIZED);
     }
 
     //    User logout *****************************************************************************************************
