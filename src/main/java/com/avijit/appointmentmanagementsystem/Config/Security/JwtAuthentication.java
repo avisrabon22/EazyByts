@@ -16,8 +16,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtAuthentication  {
 
-
-
 private static  final Key secret_key= Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public static String generateToken(String email) throws IOException {

@@ -56,7 +56,7 @@ public class UserService implements UserServiceInterface {
 
     // User login method ********************************************************************************************
     @Override
-    public boolean userLogin(LogInRequestDto logInRequestDto, HttpServletResponse httpServletResponse) throws NotExist, IOException {
+    public boolean userLogin(LogInRequestDto logInRequestDto) throws NotExist{
         String UserEmail = logInRequestDto.getUsername();
         Optional<UserModel> userModel = userDao.findByEmail(UserEmail);
         if (userModel.isEmpty()) {
@@ -64,15 +64,6 @@ public class UserService implements UserServiceInterface {
         }
         String password = userModel.get().getPassword();
         if (BCrypt.checkpw(logInRequestDto.getPassword(), password)) {
-            String token = JwtAuthentication.generateToken(UserEmail);
-            String jwtToken = "Bearer " + token;
-            String encodedValue = URLEncoder.encode(jwtToken, StandardCharsets.UTF_8);
-            Cookie cookie = new Cookie("Authorization", encodedValue);
-            cookie.setHttpOnly(true);
-            cookie.setSecure(true);
-            cookie.setMaxAge(3600);
-            cookie.setPath("/");
-            httpServletResponse.addCookie(cookie);
             return true;
         } else {
             throw new NotExist("Password not matched");

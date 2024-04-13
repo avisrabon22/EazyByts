@@ -8,6 +8,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,23 +38,34 @@ public class UserController {
 
     // User login ******************************************************************************************************
     @PostMapping("/user/login")
-    public ResponseEntity<String> userLogin(@Validated @RequestBody LogInRequestDto logInRequestDto, HttpServletRequest httpServletRequest , HttpServletResponse httpServletResponse) throws NotExist, IOException {
+    public ResponseEntity<String> userLogin(@CookieValue(name = "authorization",defaultValue = "") String token,@Validated @RequestBody LogInRequestDto logInRequestDto , HttpServletResponse httpServletResponse) throws NotExist, IOException {
         LoginTokenDto loginTokenDto = new LoginTokenDto();
-        if (httpServletRequest.getHeader("Authorization") != null) {
-            loginTokenDto.setToken(httpServletRequest.getHeader("Authorization"));
-        }
 
-        if (loginTokenDto.getToken() != null) {
+       loginTokenDto.setToken(token);
+
+        if (!loginTokenDto.getToken().isEmpty()) {
             if (userServiceInterface.userTokenLogin(loginTokenDto)) {
                 return ResponseEntity.ok("Welcome back");
             }
-        } else if (userServiceInterface.userLogin(logInRequestDto, httpServletResponse)) {
+
+
+        } else if (userServiceInterface.userLogin(logInRequestDto)) {
+            String tokenGen = JwtAuthentication.generateToken(logInRequestDto.getUsername());
+            String jwtToken = "Bearer " + tokenGen;
+            String encodedValue = URLEncoder.encode(jwtToken, StandardCharsets.UTF_8);
+            Cookie cookie = new Cookie("authorization", encodedValue);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setMaxAge(3600);
+            cookie.setPath("/");
+            System.out.println("Cookie: " + cookie.getName());
+            httpServletResponse.addCookie(cookie);
             return ResponseEntity.ok("User has logged in");
         } else {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>("User not found", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>("You are not authorized", HttpStatus.UNAUTHORIZED);
     }
 
     //    User logout *****************************************************************************************************

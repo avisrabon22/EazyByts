@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public interface UserServiceInterface {
     public void userRegister(UserRegisterRequestDto userRequestDto,HttpServletResponse httpServletResponse) throws IOException, NotExist;
-    public boolean userLogin(LogInRequestDto logInRequestDto, HttpServletResponse httpServletResponse) throws NotExist, IOException;
+    public boolean userLogin(LogInRequestDto logInRequestDto) throws NotExist;
     public boolean userTokenLogin(LoginTokenDto loginTokenDto);
     public UserResisterResponseDto getProfile(UserMailRequestDto userMailRequestDto);
 }
