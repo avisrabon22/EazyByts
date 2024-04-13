@@ -78,8 +78,9 @@ public class UserService implements UserServiceInterface {
             token = token.substring(7);
         }
         if (JwtAuthentication.validateToken(token)) {
-            String email = JwtAuthentication.extractSubject(token);
-            System.out.println(email);
+            // String email =
+            // System.out.println(email);
+                    JwtAuthentication.extractSubject(token);
             return true;
         } else {
             return false;

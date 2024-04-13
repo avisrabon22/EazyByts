@@ -7,6 +7,7 @@ import com.avijit.appointmentmanagementsystem.Services.UserServiceInterface;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -27,7 +28,7 @@ public class UserController {
 
     // User registration ************************************************************************************************
     @PostMapping("/user/register")
-    public ResponseEntity<String> userRegister( @RequestBody UserRegisterRequestDto userRequestDto, HttpServletResponse httpServletResponse) throws IOException, NotExist {
+    public ResponseEntity<String> userRegister(@RequestBody UserRegisterRequestDto userRequestDto, HttpServletResponse httpServletResponse) throws IOException, NotExist {
         if (userRequestDto.getEmail().isEmpty() || userRequestDto.getName() == null || userRequestDto.getPassword() == null) {
             return new ResponseEntity<>("Please fill all the fields", HttpStatus.BAD_REQUEST);
         }
@@ -38,18 +39,8 @@ public class UserController {
 
     // User login ******************************************************************************************************
     @PostMapping("/user/login")
-    public ResponseEntity<String> userLogin(@CookieValue(name = "authorization",defaultValue = "") String token,@Validated @RequestBody LogInRequestDto logInRequestDto , HttpServletResponse httpServletResponse) throws NotExist, IOException {
-        LoginTokenDto loginTokenDto = new LoginTokenDto();
-
-       loginTokenDto.setToken(token);
-
-        if (!loginTokenDto.getToken().isEmpty()) {
-            if (userServiceInterface.userTokenLogin(loginTokenDto)) {
-                return ResponseEntity.ok("Welcome back");
-            }
-
-
-        } else if (userServiceInterface.userLogin(logInRequestDto)) {
+    public ResponseEntity<String> userLogin(@Validated @RequestBody LogInRequestDto logInRequestDto, HttpServletResponse httpServletResponse) throws NotExist, IOException {
+        if (userServiceInterface.userLogin(logInRequestDto)) {
             String tokenGen = JwtAuthentication.generateToken(logInRequestDto.getUsername());
             String jwtToken = "Bearer " + tokenGen;
             String encodedValue = URLEncoder.encode(jwtToken, StandardCharsets.UTF_8);
@@ -62,10 +53,21 @@ public class UserController {
             httpServletResponse.addCookie(cookie);
             return ResponseEntity.ok("User has logged in");
         } else {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User not found,please register yourself", HttpStatus.NOT_FOUND);
         }
+    }
 
-        return new ResponseEntity<>("You are not authorized", HttpStatus.UNAUTHORIZED);
+    //    User validate token **********************************************************************************************
+    @GetMapping("/user/validate")
+    public ResponseEntity<String> validateToken(@CookieValue(name = "authorization", defaultValue = "") String token) {
+        LoginTokenDto loginTokenDto = new LoginTokenDto();
+        loginTokenDto.setToken(token);
+        if (!loginTokenDto.getToken().isEmpty()) {
+            if (userServiceInterface.userTokenLogin(loginTokenDto)) {
+                return ResponseEntity.ok("Welcome back");
+            }
+        }
+        return new ResponseEntity<>("You are not authorized, please login again", HttpStatus.UNAUTHORIZED);
     }
 
     //    User logout *****************************************************************************************************
@@ -79,7 +81,7 @@ public class UserController {
 
     // User profile *****************************************************************************************************
     @GetMapping("/user/profile")
-    public ResponseEntity<UserResisterResponseDto> getProfile(@CookieValue(name = "Authorization") String token)  {
+    public ResponseEntity<UserResisterResponseDto> getProfile(@CookieValue(name = "Authorization") String token) {
         if (token != null) {
             if (token.startsWith("Bearer")) {
                 token = token.substring(7);
